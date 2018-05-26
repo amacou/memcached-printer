@@ -18,8 +18,8 @@ def __main__(argv)
     opts.on("-v", "--with-value", "print base64 encoded value") do |v|
       options[:show_value] = v
     end
-    opts.on("-L", "--with-label", "prity print") do |v|
-      options[:prity_print] = v
+    opts.on("-L", "--with-label", "pretty print") do |v|
+      options[:pretty_print] = v
     end
   end
   op.parse! argv
@@ -36,8 +36,8 @@ def __main__(argv)
     client.fetch_items_with_key(slab_id, limit).each do |item|
       item.value = client.fetch_value(item.key) if options[:show_value]
 
-      if options[:prity_print]
-        puts item.prity_format
+      if options[:pretty_print]
+        puts item.pretty_format
       else
         puts item.simple_format
       end
@@ -55,7 +55,7 @@ module MemcachedPrinter
       str
     end
 
-    def prity_format
+    def pretty_format
       str = "slab_id:#{id} key:#{key} size:#{bytes}bytes"
       str += if expiration_time == '0'
               " expiration_time:none"
