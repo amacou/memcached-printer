@@ -2,6 +2,8 @@ def __main__(argv)
   options = { host: 'localhost', port: 11211 }
 
   op = OptionParser.new do |opts|
+    opts.banner = "Usage: memcached-printer [options]"
+
     opts.on("-v", "--version", "show version number") do |v|
       puts "v#{MemcachedPrinter::VERSION}"
       exit
