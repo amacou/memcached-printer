@@ -13,7 +13,7 @@ docker-compose run compile
 ### print memcached keys
 ```sh
 memcached-printer
-#=> 1 hello 15 0
+#=> 1 hello 5 1530416119
 ```
 
 ### host and port (detailt: localhost:11211)
@@ -25,17 +25,27 @@ memcached-printer -h 192.0.2.0 -p 12345
 ### with label
 ```sh
 memcached-printer -L
-#=> slab_id:1 key:hello size:15bytes expiration_time:none
+#=> slab_id:1 key:hello size:5bytes expiration_time:2018-07-01 12:35:19
 ```
 
 ### with value
 ```sh
 memcached-printer -v
-#=> 1 hello 15 0 BAhJIgp3b3JsZAY6BkVU
+#=> 1 hello 5 1530416119 12 world
 
 memcached-printer -vL
-#=> slab_id:1 key:hello size:15bytes expiration_time:none base64_value:BAhJIgp3b3JsZAY6BkVU
+#=> slab_id:1 key:hello size:5bytes expiration_time:2018-07-01 12:35:19 flags:12 value:world
 ```
+
+### with base64 encoded value
+```sh
+memcached-printer -vb
+#=> 1 hello 5 1530416119 12 d29ybGQ=
+
+memcached-printer -vbL
+#=> slab_id:1 key:hello size:5bytes expiration_time:2018-07-01 12:35:19 flags:12 base64_value:d29ybGQ=
+```
+
 
 ### filter by slab_node
 ```sh
