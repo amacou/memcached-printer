@@ -1,5 +1,5 @@
 def __main__(argv)
-  options = { host: 'localhost', port: 11211 }
+  options = { host: 'localhost', port: 11211, base64: false }
 
   op = OptionParser.new do |opts|
     opts.banner = "Usage: memcached-printer [options]"
@@ -17,8 +17,11 @@ def __main__(argv)
     opts.on("-i VAL", "--slab_id=VAL", "memcached slab id. default #{options[:slab_id]}") do |v|
       options[:slab_id] = v
     end
-    opts.on("-v", "--with-value", "print base64 encoded value") do |v|
+    opts.on("-v", "--with-value", "print raw value") do |v|
       options[:show_value] = v
+    end
+    opts.on("-b", "--base64", "value to encode by base64") do |v|
+      options[:base64] = true
     end
     opts.on("-L", "--with-label", "pretty print") do |v|
       options[:pretty_print] = v
@@ -39,9 +42,9 @@ def __main__(argv)
       item.value, item.flags = client.fetch_value_and_flags(item.key) if options[:show_value]
 
       if options[:pretty_print]
-        puts item.pretty_format
+        puts item.pretty_format(options[:base64])
       else
-        puts item.simple_format
+        puts item.simple_format(options[:base64])
       end
     end
   end
