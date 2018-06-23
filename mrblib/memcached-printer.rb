@@ -36,7 +36,7 @@ def __main__(argv)
 
   slab_id_and_limit_list.each do |slab_id, limit|
     client.fetch_items_with_key(slab_id, limit).each do |item|
-      item.value = client.fetch_value(item.key) if options[:show_value]
+      item.value, item.flags = client.fetch_value_and_flags(item.key) if options[:show_value]
 
       if options[:pretty_print]
         puts item.pretty_format

@@ -45,7 +45,7 @@ module MemcachedPrinter
       items
     end
 
-    def fetch_value(key)
+    def fetch_value_and_flags(key)
       socket.write "get #{key}\r\n"
       keyline = socket.gets # "VALUE <key> <flags> <bytes>\r\n"
 
@@ -63,7 +63,7 @@ module MemcachedPrinter
 
       return nil if keyline == "END\r\n"
 
-      unless match = keyline.match(/(?<bytes>\d+)\r/)
+      unless match = keyline.match(/VALUE .+ (?<flags>\d+) (?<bytes>\d+)\r/)
         socket.close
         puts "unexpected response #{keyline.inspect}"
         exit 1
@@ -72,7 +72,7 @@ module MemcachedPrinter
       value = socket.read match[:bytes].to_i
       socket.read 2 # "\r\n"
       socket.gets   # "END\r\n"
-      value
+      [value, match[:flags]]
     end
 
     private
