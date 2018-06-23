@@ -75,6 +75,11 @@ module MemcachedPrinter
       [value, match[:flags]]
     end
 
+    def close
+      @socket.close if @socket && !@socket.closed?
+      @socket = nil
+    end
+
     private
     def error_response?(response)
       response.match?(/\A(?:CLIENT_|SERVER_)?ERROR(.*)/)
@@ -92,11 +97,6 @@ module MemcachedPrinter
       end
 
       @socket
-    end
-
-    def close
-      @socket.close if @socket && !@socket.closed?
-      @socket = nil
     end
   end
 end
